@@ -1,0 +1,39 @@
+# FEISTEL : Generation des Cles
+
+def gen_keys(k, h, g, d):
+    k = list(str(k))
+    h = list(str(h))
+    
+    if len(k) != 8:
+        k = ['0']*(8 - len(k)) + k
+    
+    if len(h) != 8:
+        h = ['0']*(8 - len(h)) + h
+    
+    key = [k[int(h[i])] for i in range(8)]
+    
+    k1p = key[:4]
+    k2p = key[4:]
+    
+    k1 = [int(bit) for bit in bin(int(''.join(map(str, k1p)), 2) ^ int(''.join(map(str, k2p)), 2))[2:].zfill(4)]
+    k2 = bin(int(''.join(map(str, k1p)), 2) & int(''.join(map(str, k2p)), 2))[2:].zfill(4)
+ 
+    k1 = k1[g:] + k1[:g]
+    k2 = k2[4 - d:] + k2[:4 - d]
+    
+    k1 = ''.join(map(str, k1))
+    k2 = ''.join(map(str, k2))
+    
+    return k1, k2
+
+while True:
+    K = int(input("Entrez la clé secrète (8 bits) : "))
+    h = int(input("Entrez la fonction de permutation (8 bits) : "))
+    dg = int(input('Ordre de décalage à gauche : '))
+    dd = int(input('Ordre de décalage à droite : '))
+    
+    if 9999999 < K < 11111112 and 1234566 < h < 76543211 and dg < 4 and dd < 4:
+        break
+
+k1, k2 = gen_keys(K, h, dg, dd)
+print(k1, '\n', k2)
