@@ -1,0 +1,50 @@
+# Feistel : Chiffrement
+def crypt_feistel(N, pie, p):
+    global k1
+    global k2
+    N = str(N)
+    if len(N) != 8:
+        N = '0'*(8 - len(N)) + N
+    
+    # Utilisation de N plutôt que n ici
+    N = [int(N[int(pie[i])]) for i in range(8)]
+    
+    G0 = N[:4]
+    D0 = N[4:]
+    
+    # Conversion des chaînes de bits en listes d'entiers pour les opérations de XOR et OR
+    G0 = list(map(int, G0))
+    D0 = list(map(int, D0))
+    
+    D1 = [G0[i] ^ k1[i] for i in range(4)]
+    G1 = [D0[i] ^ (G0[i] | k1[i]) for i in range(4)]
+    
+    D2 = [G1[i] ^ k2[i] for i in range(4)]
+    G2 = [D1[i] ^ (G1[i] | k2[i]) for i in range(4)]
+    
+    c = G2 + D2
+    
+    pie_1 = [0] * 8
+    for i in range(8):
+        pie_1[int(pie[i])] = i
+        
+    c = [c[pie_1[i]] for i in range(8)]
+    c = ''.join(map(str, c))
+    
+    return c
+
+while True:
+    N = input("Entrez le bloc N de 8 bits : ")
+    pie = input("Entrez la fonction de permutation pie (8 bits) : ")
+    p = input("Entrez la fonction de permutation p (4 bits) : ")
+    k1 = input("Entrez la sous-cle k1 (4 bits) : ")
+    k2 = input("Entrez la sous-cle k2 (4 bits) : ")
+    
+    # Correction des conditions de la boucle while
+    if 9999999 < int(N) < 11111112 and 1234566 < int(pie) < 76543211 and 122 < int(p) < 3211 and len(p) == 4:
+        break
+
+
+# Chiffrement Feistel
+chiffrement = crypt_feistel(N, pie, p)
+print(chiffrement)
