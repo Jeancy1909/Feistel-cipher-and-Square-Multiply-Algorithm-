@@ -41,7 +41,7 @@ while True:
     k2 = input("Entrez la sous-cle k2 (4 bits) : ")
     
     # Correction des conditions de la boucle while
-    if 9999999 < int(N) < 11111112 and 1234566 < int(pie) < 76543211 and 122 < int(p) < 3211 and len(p) == 4:
+    if len(N) < 9 and len(pie) == 8 and len(k1)== 4 and len(k2)==4 and len(p) == 4:
         break
 
 
