@@ -1,0 +1,16 @@
+# Square & Multiply Algorithm
+
+def sma(x,b,n):
+    p=[]
+    p.append(x)
+    exp = str(int(bin(b),2))
+    for i in range(len(exp)):
+        p.append((( p[i-1] ** 2)*(x ** int(exp[i]) ))%n)
+    return p[-1]
+
+x = int(input('la base X :  '))
+b = int(input("l'exposant b :  "))
+n = int(input('la valeur de n :  '))
+
+a = sma(x,b,n)
+print(x,"**",b,"(mod",n,")=",a)
