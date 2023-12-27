@@ -1,1 +1,59 @@
+# Feistel : Dechiffrement
+
+def decrypt_feistel(c, pie, p):
+    
+    global k1
+    global k2
+
+    # Appliquer l'inverse de la permutation π
+    c = [c[int(pie[i])] for i in range(8)]
+    
+    G2 = c[:4]
+    D2 = c[4:]
+    
+    G2 = list(map(int, G2))
+    D2 = list(map(int, D2))
+    
+    p_inverse = [0] * 4
+    for i in range(4):
+        p_inverse[int(p[i])] = i
+    
+    G1 = [D2[i] ^ int(k2[i]) for i in range(4)]
+    G1 = [G1[p_inverse[i]] for i in range(4)]
+    D1 = [G2[i] ^ (G1[i] | int(k2[i])) for i in range(4)]
+    
+    G0 = [D1[i] ^ int(k1[i]) for i in range(4)]
+    G0 = [G0[p_inverse[i]] for i in range(4)]
+    D0 = [G1[i] ^ (G0[i] | int(k1[i])) for i in range(4)]
+    
+    # Conversion des listes d'entiers en chaînes de bits
+    D0 = ''.join(map(str, D0))
+    G0 = ''.join(map(str, G0))
+    D1 = ''.join(map(str, D1))
+    G1 = ''.join(map(str, G1))
+    
+    plaintext = G0 + D0
+    
+    # Appliquer l'inverse de la permutation p
+    pie_1 = [0] * 8
+    for i in range(8):
+        pie_1[int(pie[i])] = i
+        
+    plaintext = [plaintext[pie_1[i]] for i in range(8)]
+    plaintext = ''.join(map(str, plaintext))
+    
+    return plaintext
+
+while True:
+    c = input("Entrez le bloc c de 8 bits : ")
+    pie = input("Entrez la fonction de permutation pie (8 bits) : ")
+    p = input("Entrez la fonction de permutation p (4 bits) : ")
+    k1 = input("Entrez la sous-cle k1 (4 bits) : ")
+    k2 = input("Entrez la sous-cle k2 (4 bits) : ")
+    
+    if len(c) == 8 and len(pie) == 8 and len(k1) == 4 and len(k2) == 4 and len(p) == 4:
+        break
+
+plaintext = decrypt_feistel(c, pie, p)
+print("Texte déchiffré : ", plaintext)
 
